@@ -1,27 +1,19 @@
-import { useRef, useState } from "react"; // to reference html in the page
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faPlay,
   faAngleLeft,
   faAngleRight,
   faPause,
+  faPlay,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-function Player({ currentSong, isPlaying, setIsPlaying }) {
-  const [songInfo, setSongInfo] = useState({
-    currentTime: 0,
-    duration: 0,
-  });
-
-  const timeUpdateHandler = (e) => {
-    const current = e.target.currentTime;
-    const duration = e.target.duration;
-    console.log(current, duration);
-    setSongInfo({ ...songInfo, currentTime: current, duration }); // update currenTime and duration of whatever there is in SongInfo
-  };
-
-  const audioRef = useRef(null); // how to reference html tag, initial value null
-
+function Player({
+  currentSong,
+  isPlaying,
+  setIsPlaying,
+  audioRef,
+  setSongInfo,
+  songInfo,
+}) {
   const playSongHandler = () => {
     if (isPlaying) {
       audioRef.current.pause();
@@ -49,7 +41,7 @@ function Player({ currentSong, isPlaying, setIsPlaying }) {
         <p>{getTime(songInfo.currentTime)}</p>
         <input
           min={0}
-          max={songInfo.duration}
+          max={songInfo.duration || 0}
           value={songInfo.currentTime}
           onChange={dragHandler}
           type="range"
@@ -70,12 +62,6 @@ function Player({ currentSong, isPlaying, setIsPlaying }) {
           icon={faAngleRight}
         />
       </div>
-      <audio
-        onLoadedMetadata={timeUpdateHandler}
-        onTimeUpdate={timeUpdateHandler}
-        ref={audioRef}
-        src={currentSong.audio}
-      ></audio>
     </div>
   );
 }
